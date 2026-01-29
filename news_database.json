@@ -1,0 +1,124 @@
+{
+  "categories": {
+    "Politica": [
+      {
+        "text": "Il governo italiano ha approvato una legge per ridurre le tasse sul lavoro del 5% a partire dal 2024.",
+        "is_true": true,
+        "explanation": "Questa notizia è vera. La legge di bilancio 2024 prevede effettivamente una riduzione del cuneo fiscale.",
+        "source": "Fonte ufficiale: Gazzetta Ufficiale della Repubblica Italiana"
+      },
+      {
+        "text": "Il Presidente della Repubblica ha dichiarato che abolirà il Parlamento con un decreto urgente.",
+        "is_true": false,
+        "explanation": "Questa è una fake news. Il Presidente della Repubblica non ha il potere di abolire il Parlamento, è costituzionalmente impossibile.",
+        "source": "Verifica: Costituzione Italiana, articoli 87-91"
+      },
+      {
+        "text": "L'Unione Europea ha stabilito nuove regole per la sostenibilità ambientale delle aziende.",
+        "is_true": true,
+        "explanation": "Vero. La direttiva CSRD (Corporate Sustainability Reporting Directive) è entrata in vigore nel 2024.",
+        "source": "Fonte: Gazzetta Ufficiale dell'Unione Europea"
+      }
+    ],
+    "Scienza": [
+      {
+        "text": "Gli scienziati hanno scoperto acqua liquida su Marte nel sottosuolo polare.",
+        "is_true": true,
+        "explanation": "Questa scoperta è stata confermata nel 2018 da un team italiano usando il radar MARSIS.",
+        "source": "Fonte: Nature Astronomy, luglio 2018"
+      },
+      {
+        "text": "La Terra è piatta e NASA ha sempre mentito sulle foto satellitari.",
+        "is_true": false,
+        "explanation": "Fake news. Esistono innumerevoli prove scientifiche che dimostrano che la Terra è sferica.",
+        "source": "Verifica: Qualsiasi libro di fisica o astronomia"
+      },
+      {
+        "text": "Il telescopio James Webb ha catturato immagini delle galassie più antiche dell'universo.",
+        "is_true": true,
+        "explanation": "Vero. Il JWST ha osservato galassie formatesi circa 300 milioni di anni dopo il Big Bang.",
+        "source": "Fonte: NASA, ESA - Comunicati stampa 2022-2024"
+      }
+    ],
+    "Tecnologia": [
+      {
+        "text": "OpenAI ha lanciato GPT-4, un modello di intelligenza artificiale più potente del predecessore.",
+        "is_true": true,
+        "explanation": "Vero. GPT-4 è stato rilasciato nel marzo 2023 con capacità multimodali migliorate.",
+        "source": "Fonte: Sito ufficiale OpenAI"
+      },
+      {
+        "text": "I microchip 5G nei vaccini COVID-19 permettono al governo di controllare la mente delle persone.",
+        "is_true": false,
+        "explanation": "Fake news completa. I vaccini non contengono microchip e il 5G è solo una tecnologia di rete mobile.",
+        "source": "Verifica: OMS, fact-checking multipli"
+      },
+      {
+        "text": "Apple ha annunciato il Vision Pro, un headset per la realtà mista.",
+        "is_true": true,
+        "explanation": "Vero. Apple Vision Pro è stato annunciato nel giugno 2023 e lanciato nel 2024.",
+        "source": "Fonte: Apple Newsroom"
+      }
+    ],
+    "Salute": [
+      {
+        "text": "L'OMS ha classificato l'aspartame come possibile cancerogeno per l'uomo.",
+        "is_true": true,
+        "explanation": "Vero. Nel luglio 2023, l'OMS ha inserito l'aspartame nel gruppo 2B dei possibili cancerogeni.",
+        "source": "Fonte: Comunicato stampa OMS, luglio 2023"
+      },
+      {
+        "text": "Bere acqua calda con limone cura il cancro in modo definitivo.",
+        "is_true": false,
+        "explanation": "Fake news pericolosa. Non esiste una cura miracolosa per il cancro attraverso rimedi casalinghi.",
+        "source": "Verifica: AIRC, Fondazione Veronesi"
+      },
+      {
+        "text": "L'attività fisica regolare riduce il rischio di malattie cardiovascolari.",
+        "is_true": true,
+        "explanation": "Vero. Numerosi studi scientifici confermano i benefici dell'esercizio fisico per il cuore.",
+        "source": "Fonte: American Heart Association, studi multipli"
+      }
+    ],
+    "Intrattenimento": [
+      {
+        "text": "Il film 'Oppenheimer' di Christopher Nolan ha vinto l'Oscar come miglior film nel 2024.",
+        "is_true": true,
+        "explanation": "Vero. Oppenheimer ha vinto 7 Oscar incluso miglior film alla cerimonia del 2024.",
+        "source": "Fonte: Academy Awards official website"
+      },
+      {
+        "text": "Tutti i film Marvel sono basati su storie completamente originali senza fumetti di riferimento.",
+        "is_true": false,
+        "explanation": "Falso. I film Marvel sono adattamenti dei fumetti Marvel Comics pubblicati per decenni.",
+        "source": "Verifica: Storia dei Marvel Comics"
+      },
+      {
+        "text": "Taylor Swift ha vinto il Grammy per Album dell'Anno per la quarta volta nella sua carriera.",
+        "is_true": true,
+        "explanation": "Vero. Taylor Swift ha vinto il suo quarto Grammy per Album dell'Anno nel 2024 con 'Midnights'.",
+        "source": "Fonte: Grammy Awards 2024"
+      }
+    ],
+    "Economia": [
+      {
+        "text": "L'inflazione in Europa ha raggiunto picchi storici nel 2022-2023.",
+        "is_true": true,
+        "explanation": "Vero. L'inflazione nell'Eurozona ha superato il 10% in diversi paesi nel 2022.",
+        "source": "Fonte: Eurostat, Banca Centrale Europea"
+      },
+      {
+        "text": "Bitcoin sostituirà completamente tutte le valute tradizionali entro la fine del 2024.",
+        "is_true": false,
+        "explanation": "Fake news. Non c'è nessuna evidenza che le criptovalute sostituiranno le valute fiat a breve termine.",
+        "source": "Verifica: Analisi economiche multiple"
+      },
+      {
+        "text": "Amazon ha superato i 500 miliardi di dollari di fatturato annuale.",
+        "is_true": true,
+        "explanation": "Vero. Amazon ha raggiunto questo traguardo nel 2023.",
+        "source": "Fonte: Report finanziari Amazon"
+      }
+    ]
+  }
+}
