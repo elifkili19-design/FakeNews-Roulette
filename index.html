@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎰 FakeNews Roulette - Il Gioco delle Notizie</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+    </div>
+
+    <!-- Particle Container -->
+    <div id="particles"></div>
+
+    <!-- Main Game Container -->
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <div class="logo-container">
+                <div class="logo-icon">🎰</div>
+                <h1 class="game-title">
+                    <span class="title-fake">FAKE</span>
+                    <span class="title-news">NEWS</span>
+                    <span class="title-roulette">ROULETTE</span>
+                </h1>
+            </div>
+            <div class="score-display" role="status" aria-live="polite">
+                <div class="score-item">
+                    <span class="score-label">PUNTEGGIO</span>
+                    <span class="score-value" id="score" aria-label="Punteggio attuale">0</span>
+                </div>
+                <div class="score-item streak">
+                    <span class="score-label">STREAK 🔥</span>
+                    <span class="score-value" id="streak" aria-label="Risposte consecutive corrette">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Area -->
+        <main class="game-main">
+            <!-- Roulette Wheel -->
+            <div class="roulette-section">
+                <div class="roulette-container">
+                    <div class="roulette-glow"></div>
+                    <div class="roulette-wheel" id="wheel">
+                        <div class="wheel-center">
+                            <div class="center-text">GIRA!</div>
+                        </div>
+                    </div>
+                    <div class="roulette-pointer" aria-hidden="true">▼</div>
+                </div>
+                <button class="spin-button" id="spinBtn" aria-label="Gira la ruota per ottenere una nuova notizia">
+                    <span class="btn-text">🎲 GIRA LA RUOTA</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+
+            <!-- News Card -->
+            <div class="news-section">
+                <div class="news-card" id="newsCard" role="article">
+                    <div class="card-header">
+                        <span class="card-badge">📰 NOTIZIA #<span id="newsNumber">1</span></span>
+                        <div class="card-difficulty" id="difficulty" aria-label="Livello di difficoltà">
+                            <span class="diff-star" aria-hidden="true">⭐</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p class="news-text" id="newsText" aria-live="polite">
+                            Premi "GIRA LA RUOTA" per iniziare il gioco!
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="source-info" id="sourceInfo" aria-live="polite"></div>
+                    </div>
+                </div>
+
+                <!-- Answer Buttons -->
+                <div class="answer-buttons" id="answerBtns" role="group" aria-label="Pulsanti di risposta">
+                    <button class="answer-btn real-btn" id="realBtn" disabled aria-label="La notizia è vera - premi V">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        <span class="btn-label">VERA</span>
+                        <div class="btn-shine"></div>
+                    </button>
+                    <button class="answer-btn fake-btn" id="fakeBtn" disabled aria-label="La notizia è falsa - premi F">
+                        <span class="btn-icon" aria-hidden="true">❌</span>
+                        <span class="btn-label">FALSA</span>
+                        <div class="btn-shine"></div>
+                    </button>
+                </div>
+
+                <!-- Result Display -->
+                <div class="result-display hidden" id="resultDisplay">
+                    <div class="result-icon" id="resultIcon"></div>
+                    <div class="result-text" id="resultText"></div>
+                    <div class="result-explanation" id="resultExplanation"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-markers">
+                    <span class="marker">1</span>
+                    <span class="marker">2</span>
+                    <span class="marker">3</span>
+                    <span class="marker">4</span>
+                    <span class="marker">5</span>
+                    <span class="marker">6</span>
+                    <span class="marker">7</span>
+                    <span class="marker">8</span>
+                    <span class="marker">9</span>
+                    <span class="marker">10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div class="modal-overlay hidden" id="gameOverModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalTitle">🏆 PARTITA TERMINATA!</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="final-score">
+                        <span class="final-label">Punteggio Finale</span>
+                        <span class="final-value" id="finalScore">0</span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-icon" aria-hidden="true">✅</span>
+                            <span class="stat-value" id="correctAnswers">0</span>
+                            <span class="stat-label">Corrette</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon" aria-hidden="true">❌</span>
+                            <span class="stat-value" id="wrongAnswers">0</span>
+                            <span class="stat-label">Sbagliate</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon" aria-hidden="true">🔥</span>
+                            <span class="stat-value" id="maxStreak">0</span>
+                            <span class="stat-label">Max Streak</span>
+                        </div>
+                    </div>
+                    <div class="rank-display" id="rankDisplay" aria-live="polite">
+                        <span class="rank-icon" aria-hidden="true">🥇</span>
+                        <span class="rank-text">ESPERTO DI FAKE NEWS!</span>
+                    </div>
+                </div>
+                <button class="play-again-btn" id="playAgainBtn" aria-label="Inizia una nuova partita">
+                    <span>🎮 GIOCA ANCORA</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
