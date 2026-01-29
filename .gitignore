@@ -134,3 +134,4 @@ leaderboard.json
 screenshot_*.png
 test_game.py
 generate_screenshots.py
+generate_improved_screenshots.py
