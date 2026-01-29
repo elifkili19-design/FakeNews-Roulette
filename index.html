@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FakeNews Roulette 🎰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e94560;
+        }
+
+        .stat-value.timer {
+            color: #4ecca3;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            color: #1a1a2e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '📰';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .news-source {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-source::before {
+            content: '🔗';
+        }
+
+        .news-headline {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            color: #1a1a2e;
+        }
+
+        .news-content {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:focus {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-real {
+            background: linear-gradient(135deg, #4ecca3, #38a169);
+            color: #fff;
+        }
+
+        .btn-fake {
+            background: linear-gradient(135deg, #e94560, #dc3545);
+            color: #fff;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct {
+            background: rgba(78, 204, 163, 0.2);
+            border: 2px solid #4ecca3;
+            display: block;
+        }
+
+        .feedback.wrong {
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px solid #e94560;
+            display: block;
+        }
+
+        .feedback-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .feedback-text {
+            font-size: 1.1rem;
+        }
+
+        .start-screen, .end-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .start-screen h2, .end-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #e94560;
+        }
+
+        .start-screen p, .end-screen p {
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            color: #fff;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #4ecca3;
+            margin: 20px 0;
+        }
+
+        .final-message {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            color: #a0a0a0;
+        }
+
+        .instructions li {
+            padding: 5px 0;
+        }
+
+        .instructions li::before {
+            content: '✓ ';
+            color: #4ecca3;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-bar {
+                gap: 10px;
+            }
+            
+            .stat {
+                min-width: 100px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🎰 FakeNews Roulette</h1>
+        <p>Riesci a distinguere le notizie vere da quelle false?</p>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-label">Punteggio</div>
+            <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Tempo</div>
+            <div class="stat-value timer" id="timer">30</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Streak</div>
+            <div class="stat-value" id="streak">0</div>
+        </div>
+    </div>
+
+    <main class="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="start-screen">
+            <h2>🎮 Benvenuto!</h2>
+            <div class="instructions">
+                <h3>Come si gioca:</h3>
+                <ul>
+                    <li>Leggi attentamente ogni notizia</li>
+                    <li>Decidi se la notizia è VERA o FALSA</li>
+                    <li>Hai 30 secondi per ogni risposta</li>
+                    <li>Più risposte corrette di fila = più punti!</li>
+                </ul>
+            </div>
+            <p>Metti alla prova le tue capacità di riconoscere le fake news!</p>
+            <button class="btn btn-start" onclick="startGame()" aria-label="Inizia il gioco">
+                🚀 Inizia il Gioco
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="question-counter" id="question-counter">Domanda 1 di 10</div>
+            
+            <div id="feedback" class="feedback">
+                <div class="feedback-icon" id="feedback-icon"></div>
+                <div class="feedback-text" id="feedback-text"></div>
+            </div>
+
+            <div class="news-card" id="news-card">
+                <div class="news-source" id="news-source">Fonte della notizia</div>
+                <div class="news-headline" id="news-headline">Titolo della notizia</div>
+                <div class="news-content" id="news-content">Contenuto della notizia...</div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-real" id="btn-real" onclick="checkAnswer(true)" aria-label="Segna come notizia vera">
+                    ✓ VERA
+                </button>
+                <button class="btn btn-fake" id="btn-fake" onclick="checkAnswer(false)" aria-label="Segna come notizia falsa">
+                    ✗ FALSA
+                </button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="end-screen hidden">
+            <h2>🏆 Gioco Terminato!</h2>
+            <div class="final-score" id="final-score">0</div>
+            <div class="final-message" id="final-message">punti</div>
+            <p id="final-stats"></p>
+            <button class="btn btn-start" onclick="startGame()" aria-label="Gioca di nuovo">
+                🔄 Gioca Ancora
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Collection of news - mix of real and fake
+        const newsDatabase = [
+            {
+                source: "Notizie Scientifiche",
+                headline: "Il DNA umano contiene circa 20.000 geni",
+                content: "Secondo le ultime ricerche genomiche, il genoma umano contiene circa 20.000 geni codificanti proteine, un numero molto inferiore a quanto inizialmente previsto dagli scienziati.",
+                isReal: true,
+                explanation: "È vero! Il Progetto Genoma Umano ha confermato questo numero."
+            },
+            {
+                source: "Daily News Italia",
+                headline: "Scoperta una nuova specie di unicorno in Siberia",
+                content: "Ricercatori russi affermano di aver trovato prove dell'esistenza di unicorni nelle foreste siberiane, con tanto di foto e campioni di DNA.",
+                isReal: false,
+                explanation: "Falso! Gli unicorni sono creature mitologiche e non esistono prove della loro esistenza."
+            },
+            {
+                source: "Tech Review",
+                headline: "Internet è stato inventato negli anni '60",
+                content: "ARPANET, il precursore di Internet, fu sviluppato dal Dipartimento della Difesa degli Stati Uniti alla fine degli anni '60.",
+                isReal: true,
+                explanation: "Vero! ARPANET fu creato nel 1969 e pose le basi per Internet."
+            },
+            {
+                source: "Health Today",
+                headline: "Bere 10 litri d'acqua al giorno cura tutte le malattie",
+                content: "Un nuovo studio afferma che bere grandi quantità d'acqua può curare dal cancro al diabete, secondo un controverso medico alternativo.",
+                isReal: false,
+                explanation: "Falso! Bere troppa acqua può essere pericoloso e causare iponatriemia."
+            },
+            {
+                source: "Gazzetta dello Sport",
+                headline: "La maratona è lunga 42,195 chilometri",
+                content: "La distanza ufficiale della maratona olimpica fu standardizzata alle Olimpiadi di Londra del 1908.",
+                isReal: true,
+                explanation: "Vero! La distanza fu fissata per permettere alla famiglia reale di vedere la partenza dal castello di Windsor."
+            },
+            {
+                source: "Notizie Bizzarre",
+                headline: "La Terra è in realtà a forma di ciambella",
+                content: "Un gruppo di scienziati alternativi sostiene che la Terra abbia una forma toroidale e che le agenzie spaziali nascondano la verità.",
+                isReal: false,
+                explanation: "Falso! La Terra è un geoide, approssimativamente sferica, come dimostrato da secoli di osservazioni scientifiche."
+            },
+            {
+                source: "Corriere della Sera",
+                headline: "L'Italia ha circa 60 milioni di abitanti",
+                content: "Secondo i dati ISTAT, la popolazione italiana si aggira intorno ai 60 milioni di persone.",
+                isReal: true,
+                explanation: "Vero! La popolazione italiana è effettivamente di circa 60 milioni."
+            },
+            {
+                source: "Medicina Alternativa",
+                headline: "I vaccini contengono microchip per controllare le persone",
+                content: "Secondo alcune teorie, i vaccini moderni conterrebbero nanochip per il tracciamento della popolazione mondiale.",
+                isReal: false,
+                explanation: "Falso! Questa è una teoria del complotto senza alcuna base scientifica."
+            },
+            {
+                source: "National Geographic Italia",
+                headline: "L'Everest è la montagna più alta del mondo",
+                content: "Con i suoi 8.848,86 metri sul livello del mare, il Monte Everest rimane la vetta più alta del pianeta.",
+                isReal: true,
+                explanation: "Vero! L'Everest è ufficialmente riconosciuto come la montagna più alta."
+            },
+            {
+                source: "News Flash",
+                headline: "Il governo ha annunciato la settimana lavorativa di 2 giorni",
+                content: "Una nuova legge ridurrà drasticamente l'orario di lavoro a sole 16 ore settimanali mantenendo lo stesso stipendio.",
+                isReal: false,
+                explanation: "Falso! Non esiste alcuna legge del genere in discussione."
+            },
+            {
+                source: "Focus Scienza",
+                headline: "Il cuore umano batte circa 100.000 volte al giorno",
+                content: "In media, il cuore di un adulto sano batte tra le 60 e le 100 volte al minuto, per un totale di circa 100.000 battiti giornalieri.",
+                isReal: true,
+                explanation: "Vero! Con una media di 70 battiti al minuto, si arriva a circa 100.000 al giorno."
+            },
+            {
+                source: "Salute & Benessere",
+                headline: "Guardare il telefono fa crescere un corno sulla testa",
+                content: "Ricercatori affermano che l'uso prolungato di smartphone causa la crescita di una protuberanza ossea sulla nuca.",
+                isReal: false,
+                explanation: "Falso! Questa notizia sensazionalistica è stata ampiamente smentita dalla comunità scientifica."
+            },
+            {
+                source: "La Repubblica",
+                headline: "La Torre di Pisa è inclinata di circa 4 gradi",
+                content: "Dopo i lavori di stabilizzazione completati nel 2001, la famosa torre pende di circa 4 gradi rispetto alla verticale.",
+                isReal: true,
+                explanation: "Vero! La torre è stata stabilizzata ma mantiene la sua caratteristica inclinazione."
+            },
+            {
+                source: "Eco News",
+                headline: "Gli alberi comunicano tra loro attraverso internet sotterraneo",
+                content: "Gli scienziati hanno scoperto che gli alberi nelle foreste comunicano attraverso reti fungine sotterranee, condividendo nutrienti e informazioni.",
+                isReal: true,
+                explanation: "Vero! Questa rete, chiamata 'Wood Wide Web', è stata confermata da studi scientifici."
+            },
+            {
+                source: "Cibo & Salute",
+                headline: "Mangiare cioccolato fa dimagrire",
+                content: "Un nuovo studio tedesco dimostra che mangiare cioccolato ogni giorno accelera la perdita di peso del 10%.",
+                isReal: false,
+                explanation: "Falso! Questo studio è stato rivelato essere falso e creato appositamente per dimostrare i problemi del giornalismo scientifico."
+            },
+            {
+                source: "Ansa",
+                headline: "L'acqua bolle a 100°C a livello del mare",
+                content: "Il punto di ebollizione dell'acqua a pressione atmosferica standard è di 100 gradi Celsius.",
+                isReal: true,
+                explanation: "Vero! È una delle proprietà fisiche fondamentali dell'acqua."
+            },
+            {
+                source: "Notizie dal Futuro",
+                headline: "Elon Musk ha comprato la Luna",
+                content: "Il miliardario avrebbe acquistato i diritti di proprietà della Luna per 50 miliardi di dollari.",
+                isReal: false,
+                explanation: "Falso! Secondo il Trattato sullo Spazio del 1967, nessuno può possedere corpi celesti."
+            },
+            {
+                source: "Il Sole 24 Ore",
+                headline: "L'euro è la valuta ufficiale di 20 paesi UE",
+                content: "Attualmente, 20 dei 27 paesi membri dell'Unione Europea hanno adottato l'euro come moneta ufficiale.",
+                isReal: true,
+                explanation: "Vero! La zona euro comprende attualmente 20 paesi membri."
+            },
+            {
+                source: "Wellness Magazine",
+                headline: "Il 5G causa il Covid-19",
+                content: "Secondo alcuni esperti, le onde elettromagnetiche del 5G sarebbero responsabili della diffusione del coronavirus.",
+                isReal: false,
+                explanation: "Falso! I virus non possono essere trasmessi attraverso onde radio. Questa è pura disinformazione."
+            },
+            {
+                source: "Sky TG24",
+                headline: "La luce viaggia a circa 300.000 km al secondo",
+                content: "La velocità della luce nel vuoto è di circa 299.792 chilometri al secondo, un limite fondamentale della fisica.",
+                isReal: true,
+                explanation: "Vero! La velocità della luce è una costante fisica fondamentale."
+            }
+        ];
+
+        // Game configuration constants
+        const CONFIG = {
+            TOTAL_QUESTIONS: 10,
+            TIME_PER_QUESTION: 30,
+            BASE_POINTS: 100,
+            STREAK_BONUS: 25,
+            TIMEOUT_DELAY: 2000,
+            ANSWER_DELAY: 2500
+        };
+
+        // Game state
+        let currentNewsIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let correctAnswers = 0;
+        let timer;
+        let timeLeft = CONFIG.TIME_PER_QUESTION;
+        let gameNews = [];
+        let totalQuestions = CONFIG.TOTAL_QUESTIONS;
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Start game
+        function startGame() {
+            // Reset game state
+            currentNewsIndex = 0;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            correctAnswers = 0;
+            timeLeft = CONFIG.TIME_PER_QUESTION;
+
+            // Shuffle and select news
+            gameNews = shuffleArray(newsDatabase).slice(0, totalQuestions);
+
+            // Update UI
+            document.getElementById('score').textContent = '0';
+            document.getElementById('streak').textContent = '0';
+            document.getElementById('timer').textContent = CONFIG.TIME_PER_QUESTION;
+
+            // Show game screen
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+
+            // Hide feedback
+            document.getElementById('feedback').className = 'feedback';
+
+            // Load first news
+            loadNews();
+            startTimer();
+        }
+
+        // Load current news
+        function loadNews() {
+            const news = gameNews[currentNewsIndex];
+            
+            document.getElementById('news-source').textContent = news.source;
+            document.getElementById('news-headline').textContent = news.headline;
+            document.getElementById('news-content').textContent = news.content;
+            
+            // Update question counter
+            document.getElementById('question-counter').textContent = 
+                `Domanda ${currentNewsIndex + 1} di ${totalQuestions}`;
+            
+            // Update progress bar
+            document.getElementById('progress-fill').style.width = 
+                `${((currentNewsIndex) / totalQuestions) * 100}%`;
+
+            // Enable buttons
+            document.getElementById('btn-real').disabled = false;
+            document.getElementById('btn-fake').disabled = false;
+
+            // Hide feedback
+            document.getElementById('feedback').className = 'feedback';
+        }
+
+        // Start timer
+        function startTimer() {
+            timeLeft = CONFIG.TIME_PER_QUESTION;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        // Handle timeout
+        function handleTimeout() {
+            streak = 0;
+            document.getElementById('streak').textContent = streak;
+            
+            showFeedback(false, "Tempo scaduto! ⏰");
+            
+            setTimeout(() => {
+                nextQuestion();
+            }, CONFIG.TIMEOUT_DELAY);
+        }
+
+        // Check answer
+        function checkAnswer(userSaidReal) {
+            clearInterval(timer);
+            
+            // Disable buttons
+            document.getElementById('btn-real').disabled = true;
+            document.getElementById('btn-fake').disabled = true;
+
+            const news = gameNews[currentNewsIndex];
+            const isCorrect = userSaidReal === news.isReal;
+
+            if (isCorrect) {
+                // Correct answer
+                streak++;
+                correctAnswers++;
+                if (streak > maxStreak) maxStreak = streak;
+                
+                // Calculate points with streak bonus
+                const points = CONFIG.BASE_POINTS + (streak - 1) * CONFIG.STREAK_BONUS;
+                score += points;
+                
+                document.getElementById('score').textContent = score;
+                document.getElementById('streak').textContent = streak;
+                
+                showFeedback(true, `Corretto! +${points} punti. ${news.explanation}`);
+            } else {
+                // Wrong answer
+                streak = 0;
+                document.getElementById('streak').textContent = streak;
+                
+                showFeedback(false, `Sbagliato! ${news.explanation}`);
+            }
+
+            setTimeout(() => {
+                nextQuestion();
+            }, CONFIG.ANSWER_DELAY);
+        }
+
+        // Show feedback
+        function showFeedback(isCorrect, message) {
+            const feedback = document.getElementById('feedback');
+            const icon = document.getElementById('feedback-icon');
+            const text = document.getElementById('feedback-text');
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                icon.textContent = '✅';
+            } else {
+                feedback.className = 'feedback wrong';
+                icon.textContent = '❌';
+            }
+            
+            text.textContent = message;
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentNewsIndex++;
+            
+            if (currentNewsIndex >= totalQuestions) {
+                endGame();
+            } else {
+                loadNews();
+                startTimer();
+            }
+        }
+
+        // End game
+        function endGame() {
+            clearInterval(timer);
+            
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+            
+            document.getElementById('final-score').textContent = score;
+            
+            // Calculate percentage
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            
+            // Determine message based on performance
+            let message = '';
+            let emoji = '';
+            if (percentage >= 90) {
+                message = "Sei un vero detective delle notizie!";
+                emoji = "🏆";
+            } else if (percentage >= 70) {
+                message = "Ottimo lavoro! Hai un buon occhio critico.";
+                emoji = "🌟";
+            } else if (percentage >= 50) {
+                message = "Non male, ma puoi migliorare!";
+                emoji = "💪";
+            } else {
+                message = "Attento alle fake news! Continua ad esercitarti.";
+                emoji = "📚";
+            }
+            
+            document.getElementById('final-message').textContent = `punti ${emoji}`;
+            document.getElementById('final-stats').innerHTML = 
+                `${message}<br><br>` +
+                `✓ Risposte corrette: ${correctAnswers}/${totalQuestions} (${percentage}%)<br>` +
+                `🔥 Streak massima: ${maxStreak}`;
+        }
+    </script>
+</body>
+</html>
