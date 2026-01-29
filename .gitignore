@@ -131,3 +131,6 @@ Thumbs.db
 
 # Game specific
 leaderboard.json
+screenshot_*.png
+test_game.py
+generate_screenshots.py
